@@ -1,0 +1,259 @@
+MATHAMATICAL AND RESONINING :
+
+int isLeap(int N){
+    return ((N%400 == 0) || (N%100 != 0 && N%4 == 0));
+}
+
+int bulbSwitch(int n) {
+    return sqrt(n);
+}
+
+int trailingZeroes(int n) {
+    int ans = 0;
+    while(n > 4){
+        n /= 5;
+        ans += n;
+    }return ans;
+}
+
+bool canWinNim(int n) {
+    return n%4 != 0;
+}
+
+int countSquares(int row, int column){
+    int topLeft = min(row-1,column-1);
+    int bottomRight = min(8-row,8-column);
+    int topRight = min(row-1,8-column);
+    int bottomLeft = min(8-row,column-1);
+    return (topLeft + topRight + bottomRight + bottomLeft);
+}
+
+class Solution {
+    vector<int> genRow(int n){
+        vector<int> row;
+        int ans = 1;
+        row.push_back(ans);
+        for(int j = 1; j < n; ++j){
+            ans *= (n-j);
+            ans /= j;
+            row.push_back(ans);
+        }return row;
+    }
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> triangle;
+        for(int i = 0; i < numRows; ++i){
+            triangle.push_back(genRow(i+1));
+        }return triangle;
+    }
+};
+
+class Solution {
+    int solve(int m,int n,int i,int j,vector<vector<int>>& dp){
+        if(i == m-1 && j == n-1){
+            return 1;
+        }if(i >= m || j >= n){
+            return 0;
+        }if(dp[i][j] != -1) return dp[i][j];
+        return dp[i][j] = solve(m,n,i+1,j,dp) + solve(m,n,i,j+1,dp);
+    }
+public:
+    int uniquePaths(int m, int n) {
+        int i = 0 ,j = 0;
+        vector<vector<int>> dp(m,vector<int> (n,-1));
+        return solve(m,n,i,j,dp);
+    }
+};
+
+class Solution {
+    int cnt(int m,int n){
+        int total = m+n-2;
+        int alt = m-1;
+        double ans = 1;
+        for(int i = 1; i <= alt; ++i){
+            ans *= (total - alt + i);
+            ans /= i;
+        }
+        return (int)ans;    
+    }
+public:
+    int uniquePaths(int m, int n) {
+        return cnt(m,n);
+    }
+};
+
+void rotate(vector<int>& nums, int k) {
+    int n = nums.size();
+    k %= n;
+    for(int i = 0; i < k; ++i){
+        for(int j = n-1; j > 0; --j){
+            swap(nums[j],nums[j-1]);
+        }
+    }
+}
+
+void rotate(vector<int>& nums, int k) {
+    int n = nums.size();
+    k %= n;
+    vector<int> ans(n,-1);
+    for(int i = 0; i < n-k; ++i){
+        ans[k+i] = nums[i];
+    }for(int i = 0; i < k; ++i){
+        ans[i] = nums[n-k+i];
+    }nums = ans;
+}
+
+void rotate(vector<int>& nums, int k) {
+    int n = nums.size();
+    vector<int> ans(n);
+    for(int i = 0; i < n; ++i){
+        ans[(i+k+n)%n] = nums[i];
+    }nums = ans;
+}
+
+void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        if(n == 1){
+            return ;
+        }k %= n;
+        reverse(nums.begin(),nums.end()-k);
+        reverse(nums.end()-k,nums.end());
+        reverse(nums.begin(),nums.end());
+}
+
+bool isPrime(int n){
+    for(int div = 2; div*div <= n; ++div){
+        if(n%div == 0){
+            return 0;
+        }
+    }return 1;
+}
+
+vector<bool> isPrime(n,1);
+isPrime[0] = isPrime[1] = 0;
+for(int i = 2; i < n; ++i){
+    if(isPrime[i] == 1){
+        for(int j = 2*i; j < n; j += i){
+            isPrime[j] = 0;
+        }
+    }
+}
+
+vector<bool> isPrime(n,1);
+vector<int> lp(n);
+vector<int> hp(n);
+for(int i = 2; i < n; ++i){
+    lp[i] = hp[i] = i;
+    if(isPrime[i] == 1){
+        for(int j = 2*i; j < n; j += i){
+            if(isPrime[j] == 1){
+                lp[j] = i;
+            }isPrime[j] = 0;
+            hp[j] = i;
+        }
+    }
+}while(n){
+    cout << lp[n] << " ";
+    n /= lp[n];
+}
+
+vector<vector<int>> divsVec(n);
+divsVec[0] = 0;
+divsVec[1] = 1;
+int sum = 0 ,cnt = 0;
+for(int i = 2; i < n; ++i){
+    for(int j = i; j < n; j += i){
+        divsVec[j].push_back(i);
+        sum += j;
+        cnt++;
+    }
+}
+
+int sum = 0 ,cnt = 0;
+for(int i = 1; i <= sqrt(n); ++i){
+    if(n/i == i){
+        cnt++;
+        sum += i;
+    }else{
+        cnt += 2;
+        sum += (i + n/i);
+    }
+}
+
+int sum = 0;
+for(int i = 1; i <= n; ++i){
+    sum += i*(n/i);
+}
+
+int divAandB(int n,int a,int b){
+    int c1 = n/a;
+    int c2 = n/b;
+    int c3 = n/(a*b);
+    return c1+c2-c3;
+}
+
+lcm = (a*b*c)/__gcd(a,__gcd(b,c));
+a/b = (a/__gcd(a,b))/(b/__gcd(a,b));
+
+int gcd(int a,int b){
+    while(b != 0){
+        int rem = a%b;
+        a = b;
+        b = rem;
+    }return a;
+}
+ 
+vector<string> subsets(string s){
+    int n = s.size();
+    int sz = (1<<n);
+    vector<string> subsets;
+    for(int mask = 0; mask < sz; ++mask){
+        string subset;
+        for(int bit = 0; bit < n; ++bit){
+            if(((mask>>bit)&1) != 0){
+                subset.push_back(s[bit]);
+            }
+        }if(subset.size()) subsets.push_back(subset);
+    }return subsets;
+}
+
+bool isVowel(char ch){
+    return (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u');
+}
+int main(){
+    int t;
+    cin >> t;
+    while(t--){
+        int n;
+        cin >> n;
+        string strs[n];
+        for(auto str : strs){
+            cin >> str;
+        }unordered_map<string,int> hsh;
+        for(int i = 0; i < n; ++i){
+            set<char> dist_vw;
+            for(auto ch : strs[i]){
+                if(isVowel(ch)){
+                    dist_vw.insert(ch);
+                }
+            }string vowel_str;
+            for(auto ch : dist_vw){
+                vowel_str.push_back(ch);
+            }vector<string> all_subset = subsets(vowel_str);
+            for(auto vowel_subset : all_subset){
+                hsh[vowel_subset]++;
+            }
+        }long long ans = 0;
+        for(auto pr : hsh){
+            long long cnt = pr.second;
+            if(cnt < 3)   continue;
+            long long ways = (cnt*(cnt-1)*(cnt-2))/6;
+            int n = pr.first.size();
+            if(n%2 == 0){
+                ans -= ways;
+            }else{
+                ans += ways;
+            }
+        }cout << ans << endl;
+    }
+}

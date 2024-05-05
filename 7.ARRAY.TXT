@@ -1,0 +1,777 @@
+int findKthLargest(vector<int>& nums, int k) {
+    int n = nums.size();
+    k %= n;
+    for(int cnt = 1; cnt <= k; ++cnt){
+        for(int i = 0; i < n-cnt; ++i){
+            if(nums[i] > nums[i+1]){
+                swap(nums[i],nums[i+1]);
+            }
+        }
+    }return nums[n-k];
+}
+
+int findKthLargest(vector<int>& nums, int k) {
+    sort(nums.begin(),nums.end());
+    int n = nums.size();
+    return nums[n-k];
+}
+
+bool check(vector<int>& nums) {
+    int n = nums.size();
+    int cnt = 0;
+    for(int i = 0; i < n-1; ++i){
+        if(nums[i] > nums[i+1]) cnt++;
+    }if(nums[n-1] > nums[0]) cnt++;
+    return cnt<2;
+}
+
+int removeDuplicates(vector<int>& nums) {
+    int n = nums.size();
+    int cnt = 1;
+    for(int i = 1; i < n; ++i){
+        if(nums[i] != nums[i-1]){
+            nums[cnt++] = nums[i];
+        }
+    }return cnt;
+}
+
+vector<int> RearrangebySign(vector<int>A, int n){ 
+    vector<int> pos;
+    vector<int> neg;
+    for(int i=0;i<n;i++){
+        if(A[i]>0) pos.push_back(A[i]);
+        else neg.push_back(A[i]);
+    }for(int i=0;i<n/2;i++){
+        A[2*i] = pos[i];
+        A[2*i+1] = neg[i];
+    }return A;
+}
+
+vector<int> RearrangebySign(vector<int>A){
+    int n = A.size();
+    vector<int> ans(n,0);
+    int posIndex = 0, negIndex = 1;
+    for(int i = 0;i<n;i++){
+        if(A[i]<0){
+            ans[negIndex] = A[i];
+            negIndex+=2;
+        }else{
+            ans[posIndex] = A[i];
+            posIndex+=2;
+        }
+    }return ans;
+}
+
+vector<int> RearrangebySign(vector<int>A, int n){ 
+    vector<int> pos;
+    vector<int> neg; 
+    for(int i=0;i<n;i++){
+        if(A[i]>0) pos.push_back(A[i]);
+        else neg.push_back(A[i]);
+    }if(pos.size() < neg.size()){ 
+        for(int i=0;i<pos.size();i++){
+            A[2*i] = pos[i];
+            A[2*i+1] = neg[i];
+        }int index = pos.size()*2;
+        for(int i = pos.size();i<neg.size();i++){
+            A[index] = neg[i];
+            index++;
+        }
+    }else{ 
+        for(int i=0;i<neg.size();i++){
+        A[2*i] = pos[i];
+        A[2*i+1] = neg[i];
+    }int index = neg.size()*2;
+      for(int i = neg.size();i<pos.size();i++){
+          A[index] = pos[i];
+          index++;
+        }
+    }return A; 
+}
+
+int lengthOfLongestAP(int A[], int n) {
+    if(n == 1)  return n;
+    int maxi = 2 ,curr = 2 ,j = 2;
+    while(j < n){
+        int pd = A[j-1]-A[j-2];
+        if(pd == A[j]-A[j-1]){
+            curr++;
+        }else{
+            curr = 2;
+        }maxi = max(maxi,curr);
+        ++j;
+    }return maxi;
+}
+
+int recordBreaker(int arr[],int n){
+    if(n == 1) return n;
+    int ans = 0 ,mx = -1;
+    for(int i = 0; i < n; ++i){
+        if(i != n-1 && arr[i] > arr[i+1] && arr[i] > mx){
+            ans++;
+        }mx = max(mx,arr[i]);
+    }return ans;
+}
+
+const int N = 1e6+2;
+int idx[N];
+int minIdxRept(int arr[],int n){
+    int minIdx = INT_MAX;
+    for(int i = 0; i < N; ++i){
+        idx[i] = -1;
+    }for(int i = 0; i < n; ++i){
+        if(idx[a[i]] != -1){
+            minIdx = min(minIdx,idx[a[i]]);
+        }else{
+            idx[a[i]] = i;
+        }
+    }return minIdx == INT_MAX? -1 : minIdx;
+}
+
+int firstMissingPositive(vector<int>& nums) {
+    set<int> hsh;
+    int n = nums.size();
+    for(int i = 0; i < n; ++i){
+        if(nums[i] > 0)
+            hsh.insert(nums[i]);
+    }int x = 1;
+    while(1){
+        if(hsh.find(x) == hsh.end()) return x;
+        else x++;
+    }return -1;
+}
+
+int maxSubArray(vector<int>& nums) {
+    int maxSum = INT_MIN ,n = nums.size();
+    for(int i = 0; i < n; ++i){
+        for(int j = i; j < n; ++j){
+            int sum = 0;
+            for(int k = i; k <= j; ++k){
+                sum += nums[k];
+            }maxSum = max(maxSum ,sum);
+        }
+    }return maxSum;
+}
+
+int maxSubArray(vector<int>& nums) {
+    int maxSum = INT_MIN ,n = nums.size();
+    for(int i = 0; i < n; ++i){
+        int sum = 0;
+        for(int j = i; j < n; ++j){
+            sum += nums[j];
+            maxSum = max(maxSum,sum);
+        }
+    }return maxSum;
+}
+
+int maxSubArray(vector<int>& nums) {
+    int n = nums.size() ,maxSum = nums[0];
+    vector<int> prefix(n,0);
+    prefix[0] = nums[0];
+    for(int i = 1; i < n; ++i){
+        prefix[i] += nums[i]+prefix[i-1];
+        for(int j = 0; j <= i; ++j){
+            maxSum = max(maxSum,prefix[i]-prefix[j]+nums[j]);
+        }
+    }return maxSum;
+}
+
+int maxSubArray(vector<int>& nums) {
+    int maxSum = nums[0] ,currSum = 0 ,n = nums.size();
+    for(int i = 0; i < n; ++i){
+        currSum += nums[i];
+        if(currSum < 0){
+            currSum = 0;
+        }maxSum = max(maxSum ,currSum);
+    }return maxSum == 0? *max_element(nums.begin(),nums.end()) : maxSum;
+}
+
+int maxCircSubArrSum(int arr[],int n){
+    int wrapSum = 0 ,nonWrapSum = 0 ,totalSum = 0;
+    nonWrapSum = kadane(arr,n);
+    for(int i = 0; i < n; ++i){
+        totalSum += nums[i];
+        nums[i] = -nums[i];
+    }WrapSum = totalSum + kadane(arr,n);
+    return max(wrapSum, nonWrapSum);
+}
+
+int maxProduct(vector<int>& nums) {
+    int n = nums.size() ,maxi = INT_MIN;
+    int pfxProd = 1 ,sfxProd = 1;
+    for(int i = 0; i < n; ++i){
+        pfxProd *= nums[i];
+        sfxProd *= nums[n-1-i];
+        maxi = max({maxi,pfxProd,sfxProd});
+        if(pfxProd == 0){
+            pfxProd = 1;
+        }if(sfxProd == 0){
+            sfxProd = 1;
+        }
+    }return maxi;
+}
+
+int findSplitPoint(int arr[], int n){ 
+    int leftSum = 0 ;  
+    for (int i = 0; i < n; i++) { 
+        leftSum += arr[i] ; 
+        int rightSum = 0 ; 
+        for (int j = i+1 ; j < n ; j++ ) 
+            rightSum += arr[j] ; 
+        if (leftSum == rightSum)    return i+1 ; 
+    }return -1; 
+} 
+
+int findSplitPoint(int arr[] ,int n){ 
+    int sum = accumulate(arr,arr+n,0) ,prefix = 0;
+    for(int i = 0; i < n; ++i){
+        prefix += arr[i]; 
+        if(prefix == sum - prefix){
+            return i+1;
+        }   
+    }return -1; 
+} 
+
+vector<int> printLeadersBruteForce(int arr[], int n) {
+    vector<int> ans;
+    for (int i = 0; i < n; i++) {
+    bool leader = true;
+    for (int j = i + 1; j < n; j++)
+        if (arr[j] > arr[i]) {
+            leader = false;
+            break;
+        }if (leader)    ans.push_back(arr[i]);
+    }return ans;
+}
+
+vector<int> superiorElements(vector<int> &a) {
+    vector<int> ans;
+    int n=a.size() ,maxi=INT_MIN;
+    for(int i=n-1;i>=0;i--){
+        if(a[i]>maxi){
+            ans.push_back(a[i]);
+        }maxi=max(maxi,a[i]);
+    }return ans;
+}
+
+vector < int > FindUnion(int arr1[], int arr2[], int n, int m) {
+    map < int, int > freq;
+    vector < int > Union;
+    for (int i = 0; i < n; i++)
+        freq[arr1[i]]++;
+    for (int i = 0; i < m; i++)
+        freq[arr2[i]]++;
+    for (auto & it: freq)
+        Union.push_back(it.first);
+    return Union;
+}
+
+vector < int > sortedArray(vector < int > a, vector < int > b) {
+    int m = b.size();
+    for(int j=0;j<m;j++){
+       a.push_back(b[j]);
+    }sort(a.begin(),a.end());
+    int cnt=1 ,n = a.size;
+    for(int i=1;i<n;i++){
+        if(a[i]!=a[i-1]){
+            a[cnt++]=a[i];
+        }
+    }while(a.size()>cnt) a.pop_back();
+    return a;
+}
+
+vector < int > FindUnion(int arr1[], int arr2[], int n, int m) {
+    int i = 0, j = 0; 
+    vector < int > Union;  
+    while (i < n && j < m) {
+        if (arr1[i] <= arr2[j]){
+            if (Union.size() == 0 || Union.back() != arr1[i])
+            Union.push_back(arr1[i]);
+            i++;
+        }else{
+            if (Union.size() == 0 || Union.back() != arr2[j])
+            Union.push_back(arr2[j]);
+            j++;
+        }
+    }while (i < n){
+        if (Union.back() != arr1[i])
+        Union.push_back(arr1[i]);
+        i++;
+    }while (j < m){
+        if (Union.back() != arr2[j])
+        Union.push_back(arr2[j]);
+        j++;
+    }return Union;
+}
+
+vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+    int i = 0 ,j = 0;
+    vector<int> ans;
+    sort(nums1.begin(),nums1.end());
+    sort(nums2.begin(),nums2.end());
+    int n = nums1.size() ,m = nums2.size();
+    while(i < n && j < m){
+        if(nums1[i] == nums2[j] && (ans.size() == 0 || ans.back() != nums1[i])){
+            ans.push_back(nums1[i]);
+            i++ ,j++;
+        }else if(nums1[i] > nums2[j]){
+            j++;
+        }else{
+            i++;
+        }
+    }return ans;
+}
+
+vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+    set<int> s;
+    int n = nums1.size() ,m = nums2.size();
+    for(int i = 0; i < n; ++i){
+        for(int j = 0; j < m; ++j){
+            if(nums1[i] == nums2[j]){
+                s.insert(nums1[i]);
+                nums1[i] = -1;
+                nums2[j] = -2;
+            }
+        }
+    }vector<int> ans(s.begin(),s.end());
+    return ans;
+}
+
+void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+    int l = n + m - 1;
+    int i = m-1;
+    int j = n-1;
+    while(i >= 0 || j >= 0){
+        if(i >= 0 && j >= 0){
+            if(nums1[i] > nums2[j]){
+                nums1[l--] = nums1[i--];
+            }else{
+                nums1[l--] = nums2[j--];
+            }
+        }else if(j >= 0){
+            nums1[l--] = nums2[j--];
+        }else if(i >= 0){
+            break;
+        }
+    }
+}
+
+void mergeTwoSortedArraysWithoutExtraSpace(vector<long long> &a, vector<long long> &b){
+	int n = a.size();
+	int m = b.size();
+	int l = n + m;
+	int c[l] = {0};
+	int i = 0 ,j = 0 ,k = 0;
+	while(i < n || j < m){
+		if(i < n && j < m){
+			if(a[i] < b[j]){
+				c[k++] = a[i++];
+			}else{
+				c[k++] = b[j++];
+			}
+		}else if(i < n){
+			c[k++] = a[i++];
+		}else if(j < m){
+			c[k++] = b[j++];
+		}else{
+			break;
+		}
+	}for(int i = 0; i < l; ++i){
+		if(i < n){
+			a[i] = c[i];
+		}else{
+			b[i - n] = c[i];
+		}
+	}
+}
+
+void mergeTwoSortedArraysWithoutExtraSpace(vector<long long> &a, vector<long long> &b){
+	int n=a.size(),m=b.size();
+	int left=n-1,right=0;
+	while(left>=0 && right<m){
+		if(a[left]>b[right]){
+			swap(a[left--],b[right++]);
+		}else{
+			break;
+		}
+	}sort(a.begin(),a.end());
+	sort(b.begin(),b.end());
+}
+
+void swapIfGreater(vector<long long>& arr1,int idx1,
+					vector<long long>& arr2,int idx2){
+	if(arr1[idx1] > arr2[idx2])	swap(arr1[idx1],arr2[idx2]);
+}void mergeTwoSortedArraysWithoutExtraSpace(vector<long long> &a, vector<long long> &b){
+	int n = a.size() ,m = b.size();
+	int len = n+m;
+	int gap = (len>>1) + (len&1);
+	while(gap){
+		int i = 0 ,j = i + gap;
+		while(j < len){
+			if(j < n){
+				swapIfGreater(a,i,a,j);
+			}else if(i >= n){
+				swapIfGreater(b,i-n,b,j-n);
+			}else if(i < n && j >= n){
+				swapIfGreater(a,i,b,j-n);
+			}i++; j++;
+		}if(gap == 1)	break;
+		gap = (gap>>1) + (gap&1);
+	}
+}
+
+vector<int> twoSum(vector<int>& nums, int target) {
+    int n = nums.size();
+    for(int i = 0; i < n; ++i){
+        for(int j = i+1; j < n; ++j){
+            if(nums[i] + nums[j] == target){
+                return {i,j};
+            }
+        }
+    }return {-1,-1};
+}
+
+string read(int n, vector<int> book, int target){
+    sort(book.begin(),book.end());
+    int s=0,e=n-1;
+    while(s<e){
+        int sum=book[s]+book[e];
+        if(sum==target){
+            return "YES";
+        }else if(sum<target){
+            s++;
+        }else{
+            e--;
+        }
+    }return "NO";
+}
+
+vector<int> twoSum(vector<int>& nums, int target) {
+    int n = nums.size();
+    unordered_map<int ,int>hsh;
+    for(int i = 0; i < n; ++i){
+        int moreNeeded = target - nums[i];
+        if(!hsh.empty() && hsh.find(moreNeeded) != hsh.end()){
+            return {hsh[moreNeeded],i};
+        }hsh[nums[i]] = i;
+    }return {-1,-1};
+}
+
+bool findPair(int arr[], int size, int n){
+    sort(arr,arr+size);
+    int low = 0 ,high = 1 ,diff;
+    while(high < size){
+        if(high == low) high++;
+        diff = arr[high] - arr[low];
+        if(diff == n){
+            return 1;
+        }else if(diff > n){
+            low++;
+        }else{
+            high++;
+        }
+    }return 0;
+}
+
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    int n = nums.size();
+    set<vector<int>>s;
+    for(int i = 0; i < n-3; ++i){
+        for(int j = i+1; j < n-2; ++j){
+            for(int k = j+1; k < n-1; ++k){
+                for(int l = k+1; l < n; ++l){
+                    if(nums[i]+nums[j]+nums[k]+nums[l] == target){
+                        vector<int> temp =
+                            {nums[i],nums[j],nums[k],nums[l]};
+                        sort(temp.begin(),temp.end());
+                        s.insert(temp);
+                    }
+                }
+            }
+        }
+    }vector<vector<int>> ans(s.begin(),s.end());
+    return ans;
+}
+
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    int n = nums.size();
+    set<vector<int>>s;
+    for(int i = 0; i < n-2; ++i){
+        for(int j = i+1; j < n-1; ++j){
+            set<long long> hsh;
+            for(int k = j+1; k < n; ++k){
+                long long sum = nums[i]+nums[j];
+                sum += nums[k];
+                long long fourth = target-sum;
+                if(hsh.find(fourth) != hsh.end()){
+                    vector<int>temp = {nums[i],nums[j],nums[k],(int)fourth};
+                    sort(temp.begin(),temp.end());
+                    s.insert(temp);
+                }hsh.insert(nums[k]);
+            }
+        }
+    }vector<vector<int>> ans(s.begin(),s.end());
+    return ans;
+}
+
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    int n = nums.size();
+    sort(nums.begin(),nums.end());
+    vector<vector<int>> ans;
+    for(int i = 0; i < n-3; ++i){
+        if(i != 0 && nums[i] == nums[i-1]) continue;
+        for(int j = i+1; j < n-2; ++j){
+            if(j != i+1 && nums[j] == nums[j-1]) continue;
+            int low = j+1 ,high = n-1;
+            long long sum = (long long)target - nums[i] - nums[j];
+            while(low < high){
+                if(nums[low] + nums[high] == sum){
+                    ans.push_back({nums[i],nums[j],nums[low],nums[high]});
+                    low++ ,high--;
+                    while(low < high && low != j+1 && nums[low] == nums[low-1]){
+                        low++;
+                    }while(low < high && high != n-1 && nums[high] == nums[high+1]){
+                        high--;
+                    }
+                }else if(nums[low] + nums[high] > sum){
+                    high--; 
+                }else{
+                    low++;
+                }
+            }
+        }
+    }return ans;
+}
+
+void nextPermutation(vector<int>& nums) {
+    next_permutation(nums.begin(),nums.end());
+}
+
+void nextPermutation(vector<int>& nums) {
+    int n = nums.size() ,idx = -1;
+    for(int i = n-2; i >= 0; --i){
+        if(nums[i] < nums[i+1]){
+            idx = i; 
+            break;
+        }
+    }if(idx == -1){
+        reverse(nums.begin(),nums.end());
+        return;
+    }for(int i = n-1; i > idx; --i){
+        if(nums[i] > nums[idx]){
+            swap(nums[i],nums[idx]);
+            break;
+        }
+    }reverse(nums.begin()+idx+1,nums.end());
+}
+
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    int n  = intervals.size();
+    sort(intervals.begin(),intervals.end());
+    vector<vector<int>> ans;
+    for(int i = 0 ; i < n; ++i){
+        int start = intervals[i][0];
+        int end = intervals[i][1];
+        if(!ans.empty() && ans.back()[1]>=end) continue;
+        for(int j = i+1; j < n; ++j){
+            if(end >= intervals[j][0]){
+                end = max(end,intervals[j][1]);
+            }else{
+                break;
+            }
+        }ans.push_back({start,end});
+    }return ans;
+}
+
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    int n  = intervals.size();
+    sort(intervals.begin(),intervals.end());
+    vector<vector<int>> ans;
+    for(int i = 0 ; i < n; ++i){
+        if(ans.empty() || ans.back()[1] < intervals[i][0]){
+            ans.push_back({intervals[i]});
+        }else{
+            ans.back()[1] = max(ans.back()[1],intervals[i][1]);
+        }
+    }return ans;
+}
+
+bool linearSearch(vector<int>&a, int num) {
+    int n = a.size(); 
+    for (int i = 0; i < n; i++) {
+        if (a[i] == num)
+            return true;
+    }return false;
+}int longestSuccessiveElements(vector<int>&a) {
+    int n = a.size() ,longest = 1;
+    for (int i = 0; i < n; i++) {
+        int x = a[i];
+        int cnt = 1;
+        while (linearSearch(a, x + 1) == true) {
+            x += 1;
+            cnt += 1;
+        }longest = max(longest, cnt);
+    }return longest;
+}
+
+int longestSuccessiveElements(vector<int>&a) {
+    int n = a.size();
+    if (n == 0) return 0;
+    sort(a.begin(), a.end());
+    int lastSmaller = INT_MIN ,cnt = 0 ,longest = 1;
+    for (int i = 0; i < n; i++) {
+        if (a[i] - 1 == lastSmaller) {
+            cnt += 1;
+            lastSmaller = a[i];
+        }else if (a[i] != lastSmaller) {
+            cnt = 1;
+            lastSmaller = a[i];
+        }longest = max(longest, cnt);
+    }return longest;
+}
+
+int longestSuccessiveElements(vector<int>&a) {
+    int n = a.size();
+    if (n == 0) return 0;
+    int longest = 1;
+    unordered_set<int> st;
+    for (int i = 0; i < n; i++) {
+        st.insert(a[i]);
+    }for (auto it : st) {
+        if (st.find(it - 1) == st.end()) {
+            int cnt = 1;
+            int x = it;
+            while (st.find(x + 1) != st.end()) {
+                x = x + 1;
+                cnt = cnt + 1;
+            }longest = max(longest, cnt);
+        }
+    }return longest;
+}
+
+void markRow(vector<vector<int>> &matrix, int n, int m, int i) {
+    for (int j = 0; j < m; j++) {
+        if (matrix[i][j] != 0) {
+            matrix[i][j] = -1;
+        }
+    }
+}void markCol(vector<vector<int>> &matrix, int n, int m, int j) {
+    for (int i = 0; i < n; i++) {
+        if (matrix[i][j] != 0) {
+            matrix[i][j] = -1;
+        }
+    }
+}vector<vector<int>> zeroMatrix(vector<vector<int>> &matrix, int n, int m) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (matrix[i][j] == 0) {
+                markRow(matrix, n, m, i);
+                markCol(matrix, n, m, j);
+            }
+        }
+    }for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (matrix[i][j] == -1) {
+                matrix[i][j] = 0;
+            }
+        }
+    }return matrix;
+}
+
+vector<vector<int>> zeroMatrix(vector<vector<int>> &matrix, int n, int m) {
+    int row[n] = {0} ,col[m] = {0}; 
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (matrix[i][j] == 0) {
+                row[i] = 1 ,col[j] = 1;
+            }
+        }
+    }for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (row[i] || col[j]) {
+                matrix[i][j] = 0;
+            }
+        }
+    }return matrix;
+}
+
+vector<vector<int>> zeroMatrix(vector<vector<int>> &matrix, int n, int m) {
+    int col0 = 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (matrix[i][j] == 0) {
+                matrix[i][0] = 0;
+                if (j != 0)
+                    matrix[0][j] = 0;
+                else
+                    col0 = 0;
+            }
+        }
+    }for (int i = 1; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+            if (matrix[i][j] != 0) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        } 
+    }if (matrix[0][0] == 0) {
+        for (int j = 0; j < m; j++) {
+            matrix[0][j] = 0;
+        }
+    }if (col0 == 0) {
+        for (int i = 0; i < n; i++) {
+            matrix[i][0] = 0;
+        }
+    }return matrix;
+}
+
+vector<int> spiralOrder(vector<vector<int>>& matrix) {
+    int rowSt = 0 ,rowEn = matrix.size()-1;
+    int colSt = 0 ,colEn = matrix[0].size()-1;
+    vector<int> ans;
+    while(rowSt <= rowEn && colSt <= colEn){
+        for(int j = colSt; j <= colEn; ++j){
+            ans.push_back(matrix[rowSt][j]);
+        }++rowSt;
+        for(int i = rowSt; i <= rowEn; ++i){
+            ans.push_back(matrix[i][colEn]);
+        }--colEn;
+        if(rowSt <= rowEn && colSt <= colEn){
+            for(int j = colEn; j >= colSt; --j){
+                ans.push_back(matrix[rowEn][j]);
+            }--rowEn;
+            for(int i = rowEn; i >= rowSt; --i){
+                ans.push_back(matrix[i][colSt]);
+            }++colSt;
+        }
+    }return ans;
+}
+
+class Solution {
+    void revRow(int n ,int m ,vector<vector<int>>& matrix){
+        for(int i = 0; i < n; ++i){
+            ::reverse(matrix[i].begin() ,matrix[i].end());
+        }
+    }
+    void transpose(int n ,int m ,vector<vector<int>>& matrix){
+        for(int i = 0; i < n; ++i){
+            for(int j = i+1; j < m; ++j){
+                swap(matrix[i][j] ,matrix[j][i]);
+            }
+        }
+    }
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int m = matrix[0].size();
+        transpose(n ,m ,matrix);
+        revRow(n ,m ,matrix);
+    }
+};
+
+->  row | col maxSum
+->  snake | wave print
+->  multiplication 
+->  find area form by principal digonal points O(n3) O(n2)
+    

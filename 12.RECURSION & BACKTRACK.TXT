@@ -1,0 +1,485 @@
+int sum(int n){
+    return ((!n)?n:n+sum(n-1));
+}
+
+int fact(int n){
+    return ((!n)?1:n*fact(n-1));
+}
+
+int digSum(int n){
+    return ((!n)?n:n%10+digSum(n/10));
+}
+
+int pows(int n,int p){
+    //return ((!p)?1:n*pows(n,p-1));
+    if(!p)  return 1;
+    int rop = pows(n,p/2);
+    int multiply = rop*rop;
+    return ((p&1)? multiply%m*n %m:multiply%m);
+}//good num
+
+int fib(int n){
+    return ((n == 0 || n == 1)?n:fib(n-1)+fib(n-2));
+}
+
+void inc(int n){
+    if(!n)  return;
+    inc(n-1);
+    cout << n << endl;
+}void dec(int n){
+    if(!n)  return;
+    cout << n << endl;
+    dec(n-1);
+} 
+
+int arrDigSum(int arr[],int n,int i){
+    return ((!n)?n:arr[i]+arrDigSum(arr,n-1,i+1));
+}
+
+bool isSorted(int arr[],int n){
+    if(n == 1)  return 1;
+    bool rop = isSorted(arr+1,n-1);
+    return (arr[0] < arr[1] && rop);
+}
+
+int firstOcc(int arr[],int n,int i,int key){
+    if(i == n)  return -1;
+    if(arr[i] == key)   return i;
+    return firstOcc(arr,n,i+1,key);
+}int lastOcc(int arr[],int n,int i,int key){
+    if(i == n)  return -1;
+    int rop = lastOcc(arr,n,i+1,key);
+    if(rop != -1)   return rop;
+    if(arr[i] == key)   return i;
+    return -1;
+}
+
+string rev(string s,int n,int i){
+    if(!n)  return "";
+    char ch = s[i];
+    string rop = rev(s,n-1,i+1);
+    return rop+ch;
+}
+
+void repPi(string s){
+    if(!s.size())   return;
+    if(s[0] == 'p' && s[1] == 'i'){
+        cout << 3.14;
+        repPi(s.substr(2));
+    }else{
+        cout << s[0];
+        repPi(s.substr(1));
+    }
+}
+
+string removeDup(string s,int n,int i){
+    if(!n)  return "";
+    char ch = s[i];
+    string rop = removeDup(s,n-1,i+1);
+    return ((ch == rop[0])?rop:ch+rop);
+}
+
+string moveAllX(string s){
+    if(!s.length()) return "";
+    char ch = s[0];
+    string ans = moveAllX(s.substr(1));
+    return ((ch == 'x')?ans+ch:ch+ans);
+}
+
+void insertAtBottom(stack<int>& s,int insertElm){
+    if(s.empty()){
+        s.push(insertElm);
+        return;
+    }int elm = s.top();
+    s.pop();
+    insertAtBottom(s,insertElm);
+    s.push(elm);
+}void rev(stack<int>& s){
+    if(s.empty()){
+        return;
+    }int elm = s.top();
+    s.pop();
+    rev(s);
+    insertAtBottom(s,elm);
+}
+
+void sortedInsert(stack<int>& s,int insertElm){
+    if(s.empty() || s.top() > insertElm){
+        s.push(insertElm);
+        return;
+    }int elm = s.top();
+    s.pop();
+    sortedInsert(s,insertElm);
+    s.push(elm);
+}void sort(stack<int>& s){
+    if(s.empty()){
+        return;
+    }int elm = s.top();
+    s.pop();
+    sort(s);
+    sortedInsert(s,elm);
+}
+
+ListNode* reverseKGroup(ListNode* head, int k) {
+    ListNode* temp = head;
+    int c = 0;
+    while(c != k){
+        if(temp == NULL){
+            return head;
+        }c++;
+        temp = temp -> next;
+    }ListNode* back = NULL;
+    ListNode* curr = head;
+    ListNode* front;
+    int cnt = 0;
+    while(cnt != k && curr){
+        front = curr -> next;
+        curr -> next = back;
+        back = curr;
+        curr = front;
+        cnt++;
+    }head -> next = reverseKGroup(curr,k);
+    return back;
+}
+
+ListNode* reverseList(ListNode* head) {
+    if(!head || head -> next == NULL){
+        return head;
+    }ListNode* newHead = reverseList(head -> next);
+    head -> next -> next = head;
+    head -> next = NULL;
+    return newHead;
+}
+
+ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    if(!list1){
+        return list2;
+    }else if(!list2){
+        return list1;
+    }ListNode* res;
+    if(list1 -> val < list2 -> val){
+        res = list1;
+        res -> next = mergeTwoLists(list1 -> next,list2);
+    }else{
+        res = list2;
+        res -> next = mergeTwoLists(list1,list2->next);
+    }
+    return res;
+}
+
+void solve(vector<string> &ans,string &str,int s,int e){
+    if(s == 0 && e == 0){
+        ans.push_back(str);
+        return ;
+    }if(s > 0){
+        str += '(';
+        solve(ans,str,s-1,e);
+        str.pop_back();
+    }if(e > 0){
+        if( s < e){
+            str += ')';
+            solve(ans,str,s,e-1);
+            str.pop_back();
+        }
+    }
+}
+
+void helper(vector<string> &a,string s, int n){
+    if(s.size() == n){
+        a.push_back(s);
+        return ;
+    }if(s[s.size()-1] == '1'){
+        helper(a, s+"0", n);
+    }else{
+        helper(a,s+"0",n);
+        helper(a,s+"1",n);
+    }
+}helper("1") ,helper("0");
+
+void subSeq(string s,string ans){
+    if(!s.length()){
+        cout << ans << endl;
+        return;
+    }char ch=s[0];
+    int code = ch;
+    string ros = s.substr(1);
+    subSeq(ros,ans);
+    subSeq(ros,ans+ch);
+    subSeq(ros, ans+to_string(code));
+}
+
+void solve(int idx,int n,int sum,int k,vector<int>& cnd,
+vector<vector<int>>& subsets,vector<int>& subset){
+    if(idx >= n || sum > k || sum == k){
+        if(sum == k){
+            subsets.push_back(subset);
+        }return;
+    }solve(idx+1,n,sum,k,cnd,subsets,subset);
+    subset.push_back(cnd[idx]);
+    sum += cnd[idx];
+    solve(idx,n,sum,k,cnd,subsets,subset);
+    sum -= cnd[idx];
+    subset.pop_back();
+}vector<vector<int>> combinationSum(vector<int>& cnd, int target) {
+    vector<vector<int>> subsets;
+    vector<int> subset;
+    int n = cnd.size();
+    solve(0,n,0,target,cnd,subsets,subset);
+    return subsets;
+}
+
+void solve(int idx,int n,int sum,int k,vector<int>& cnd,
+vector<vector<int>>& subsets,vector<int>& subset){
+    if(idx >= n || idx >= 9 || sum >= n || k == 0){
+        if(sum == n && k == 0){
+            subsets.push_back(subset);
+        }return;
+    }solve(idx+1,n,sum,k,cnd,subsets,subset);
+    subset.push_back(cnd[idx]);
+    sum += cnd[idx];
+    solve(idx+1,n,sum,k-1,cnd,subsets,subset);
+    sum -= cnd[idx];
+    subset.pop_back();
+}
+
+        bool isPalindrome(string s){
+            string rev = s;
+            reverse(rev.begin(),rev.end());
+            return s == rev;
+        }void helper(string s,vector<string>& strs,vector<vector<string>>& ans,
+        int idx ,int n){
+            if(idx == n){
+                ans.push_back(strs);
+                return;
+            }for(int i = idx; i < n; ++i){
+                string partitionStr = s.substr(idx,i-idx+1);
+                if(isPalindrome(partitionStr)){
+                    strs.push_back(partitionStr);
+                    helper(s,strs,ans,i+1,n);
+                    strs.pop_back();
+                }
+            }
+        }vector<vector<string>> partition(string s) {
+            vector<vector<string>> ans;
+            vector<string> strs;
+            int n = s.size();
+            helper(s,strs,ans,0,n);
+            return ans;
+        }
+
+        vector<vector<int>> combinationSum3(int k, int n) {
+            vector<int> cnd(n,0);
+            for(int i = 0; i < n; ++i){
+                cnd[i] = i+1;
+            }vector<vector<int>> subsets;
+            vector<int> subset;
+            solve(0,n,0,k,cnd,subsets,subset);
+            return subsets;
+        }
+
+        int solve(int idx,int n,vector<int>& nums,
+            vector<int>& subset,vector<vector<int>>& subsets,int k,int sum){
+            if(idx >= n){
+                if(sum == k){
+                    subsets.push_back(subset);
+                    return 1;
+                }return 0;
+            }subset.push_back(nums[idx]);
+            sum += nums[idx];
+            int incSeq = solve(idx+1,n,nums,subset,subsets,k,sum);
+            sum -= nums[idx];
+            subset.pop_back();
+            while(idx+1 < n && nums[idx] == nums[idx+1]) idx++;
+            int excSeq = solve(idx+1,n,nums,subset,subsets,k,sum);
+            return incSeq + excSeq;
+        }int main(){
+            vector<int> nums = {1,2,3,4,5,9,7,8,6};
+            vector<vector<int>> subsets;
+            vector<int> subset;
+            sort(nums.begin(),nums.end());
+            int n = nums.size();
+            cout << solve(0,n,nums,subset,subsets,9,0) << endl;
+            for(auto& subset : subsets){
+                for(auto& elm : subset){
+                    cout << elm << " ";
+                }cout << endl;
+            }
+        }
+
+        string keypadArr[] = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        void keypad(string s,string ans){
+            if(!s.length()){
+                cout<<ans<<endl;
+                return;
+            }char ch = s[0];
+            string code = keypadArr[ch-'0'];
+            string ros = s.substr(1);
+            for(int i=0;i<code.length();i++){
+                keypad(ros,ans+code[i]);
+            }
+        }
+
+        void permutation(string s,string ans){
+            if(!s.length()){
+                cout << ans << endl;
+                return;
+            }for(int i=0;i<s.length();i++){
+                char ch = s[i];
+                string ros = s.substr(0,i)+s.substr(i+1);
+                permutation(ros,ans+ch);
+            }
+        }
+    
+        void permutation(vector<int> &nums,vector<vector<int>> &ans,int idx){
+            int n = nums.size();
+            if(idx == n){
+                ans.push_back(nums);
+                return;
+            }for(int i = idx; i < n; ++i){
+                if(i != idx && a[i] == a[idx]){
+                    continue;
+                }swap(a[i],a[idx]);
+                permutation(nums,ans,idx+1);
+                swap(a[i],a[idx]);
+            }
+        }
+     
+        void towerOfHanoi(int n,char src,char dest,char helper){
+            if(!n) return;
+            towerOfHanoi(n-1,src,helper,dest);
+            cout<<"Move from "<<src<<" to "<<dest<<endl;
+            towerOfHanoi(n-1,helper,dest,src);
+        }
+    
+        int countPathMaze(int n,int i,int j){
+            if(i==n-1 && j==n-1){
+                return 1;
+            }if(i>n-1 || j>n-1){
+                return 0;
+            }return countPathMaze(n,1+i,j)+countPathMaze(n,i,j+1);
+        }
+    
+        int countPath(int s,int e){
+            if(s==e) return 1;
+            if(s>e) return 0;
+            int count = 0 ;
+            for(int i=1;i<=6;i++)
+                count += countPath(s+i,e);
+            return count;
+        }
+    
+        int knapsack(int value[],int wt[],int n,int W){
+            if(n==0 || W==0) return 0;
+            int exclude = knapsack(value,wt,n-1,W) ;
+            int maxi = max(knapsack(value,wt,n-1,W-wt[n-1])+value[n-1],exclude);
+            return ((wt[n-1]>W)?exclude:maxi);
+        }
+    
+        int friendsPairing(int n){ 
+            return ((n==0 || n==1 || n==2)?n:friendsPairing(n-1)+(n-1)*friendsPairing(n-2));
+        }
+    
+        int tilingWays(int n){
+            return ((n==0 || n==1)?n:tilingWays(n-1)+tilingWays(n-2));
+        }
+
+        void ratInMaze(vector<vector<int>> &arr, vector<vector<int>> &maze, 
+                        int x, int y, vector<string> &ans, string path) {
+            int n = arr.size();
+            if (x < 0 || x >= n || y < 0 || y >= n || arr[x][y] == 0 || maze[x][y] == 1) {
+                return;
+            }if (x == n - 1 && y == n - 1) {
+                ans.push_back(path);
+                return;
+            }maze[x][y] = 1;
+            ratInMaze(arr, maze, x + 1, y, ans, path + 'D'); // Down
+            ratInMaze(arr, maze, x - 1, y, ans, path + 'U'); // Up
+            ratInMaze(arr, maze, x,y - 1, ans, path + 'L'); // Left
+            ratInMaze(arr, maze, x,y + 1, ans, path + 'R'); // Right
+            maze[x][y] = 0;
+            path.pop_back();
+        }class Solution {
+        public:
+            vector<string> findPath(vector<vector<int>> &arr, int n) {
+                vector<string> ans;
+                string path = "";
+                vector<vector<int>> maze(n,vector<int>(n, 0));
+                ratInMaze(arr, maze, 0, 0, ans, path);
+                return ans;
+            }
+        };
+    
+        class Solution {
+            bool isSafe(vector<vector<string>>& ans,vector<string>& board,
+            int x,int y,int n){
+                int row = x ,col = y;
+                while(row >= 0){
+                    if(board[row][y] == 'Q'){
+                        return 0;
+                    }row--;
+                }row = x ,col = y;
+                while(row >= 0 && col >= 0){
+                    if(board[row][col] == 'Q'){
+                        return 0;
+                    }row-- ,col--;
+                }row = x ,col = y;
+                while(row >= 0 && col < n){
+                    if(board[row][col] == 'Q'){
+                        return 0;
+                    }row-- ,col++;
+                }return 1;
+            }void isPlace(vector<vector<string>>& ans,vector<string>& board,
+            int x,int y,int n){
+                if(x >= n){
+                    ans.push_back(board);
+                    return;
+                }for(int col = 0; col < n; ++col){
+                    if(isSafe(ans,board,x,col,n)){
+                        board[x][col] = 'Q';
+                        isPlace(ans,board,x+1,col,n);
+                        board[x][col] = '.';
+                    }
+                }
+            }
+        public:
+            vector<vector<string>> solveNQueens(int n) {
+                vector<vector<string>> ans;
+                vector<string> board(n,string(n,'.'));
+                isPlace(ans,board,0,0,n);
+                return ans;
+            }
+        };
+
+        class Solution {
+            public:
+                int l, m, n;
+                vector<vector<int>> directions{{0,1},{0,-1},{1,0},{-1,0}};
+                bool find(vector<vector<char>>& board, 
+                int i, int j, string &word, int idx) {
+                    if(idx >= l)
+                        return true;
+                    if(i < 0 || i >= m || j < 0 || j >= n || 
+                    board[i][j] != word[idx])
+                        return false;
+                    char temp = board[i][j];
+                    board[i][j] = '$';
+                    for(auto& dir : directions) {
+                        int i_ = i + dir[0];
+                        int j_ = j + dir[1];
+                        if(find(board, i_, j_, word, idx+1))
+                            return true;
+                    }board[i][j] = temp;
+                    return false;
+                }
+            bool exist(vector<vector<char>>& board, string word) {
+                m = board.size() ,n = board[0].size() ,l = word.length();
+                if(m*n < l) return false;
+                for(int i = 0; i<m; i++) {
+                    for(int j = 0; j<n; j++) {
+                        if(board[i][j] == word[0] && find(board, i, j, word, 0)) {
+                            return true;
+                        }
+                    }
+                }return false;
+            }
+        };

@@ -1,0 +1,712 @@
+INTUITION :
+->  union : m1 | m2
+->  intersection : m1 & m2
+->  subtraction : m1 - m2
+->  hex mask : 0x(8pos)
+->  get : (n>>i)&1 != 0
+->  set : n |= (1<<i)
+->  clear : n &= ~(1<<i)
+->  update : clear + set
+->  toggle : n ^= (1<<i)
+->  copy : x | (y & ((1<<(r-l+1))-1)<<(l-1))
+->  comp(n) : u - n or u & ~n
+->  clrLMBtilli : n & -(1<<(i+1))
+->  clrRMBtilli : n & (1<<(i+1))-1
+->  rmsb : n & -n  or n&(~n + 1) or n &(~(n-1))
+->  unset rmsb : n&(n-1)
+->  NbitsComb : (1<<n) ,maxi : (1<<n)-1
+->  bitsArr : bits[i] = bits[i>>1] + i&1;
+->  xor : till n ,in range ,club ,abstractor ,idx ,oddUnique
+->  bitCntArr for specific nature
+->  visited ,voting ,idx sort to find dup ,floyd's cycle ,modulo cycle
+
+int n;
+cin >> n;
+vector<int> mask(n,0);
+for(int i = 0; i < n; ++i){
+    int num_workers;
+    cin >> num_workers;
+    int mask = 0;
+    for(int j = 0; j < num_workers; ++j){
+        int day;
+        cin >> day;
+        mask |= (1 << day);
+    }mask[i] = mask;
+}int maxDays = 0 ,worker1 = -1 ,worker2 = -1;
+for(int i = 0; i < n; ++i){
+    for(int j = i+1; j < n; ++j){
+        int intersection = mask[i]&mask[j];
+        int common_days = __builtin_popcount(intersection);
+        if(common_days > maxDays){
+            maxDays = common_days;
+            worker1 = i;
+            worker2 = j;
+        }
+    }
+}cout << maxDays << " " << worker1 << " " << worker2 << endl;
+
+int t;
+cin >> t;
+while(t--){
+    long long form_dollar;
+    cin >> form_dollar;
+    cout << __builtin_popcountll(form_dollar) << endl;
+}
+
+int c;
+cin >> c;
+int bit_cnt = (int)log2(c)+1;
+int a = 0 ,b = 0;
+vector<int> set_bits;
+for(int i = 0; i < bit_cnt; ++i){
+    if((c>>i)&1 != 0){
+        set_bits.push_back(i);
+    }else{
+        a |= (1 << i);
+        b |= (1 << i);
+    }
+}int n = set_bits.size();
+int sz = (1<<n);
+long long ans = 0;
+for(int mask = 0; mask < sz; ++mask){
+    int a_copy = a ,b_copy = b;
+    for(int i = 0; i < n; ++i){
+        if((mask>>i)&1 != 0){
+            a |= (1 << set_bits[i]);
+        }else{
+            b |= (1 << set _bits[i]);
+        }
+    }ans = max(ans,a_copy * 1LL * b_copy);
+}cout << ans << endl;
+
+bool isPowerOfTwo(int n) {
+    return n && !(n & (n-1LL));
+}
+
+bool isPowerOfThree(int n) {
+    if(n==0){
+        return false;
+    }else if(n==1){
+        return true;
+    }return n%3==0 && isPowerOfThree(n/3);  
+}
+
+bool isPowerOfFour(int n) {
+    return (n && !(n&(n-1LL)) && (n&0x55555555));
+}
+
+bool isPowerOfFour(int n) {
+    if(!n) return n;
+    while(n != 1){
+        if(n%4 != 0){
+            return 0;
+        }n /= 4;
+    }return 1;
+}
+
+bool isPowerOfFour(int n) {
+    if (n<=0) return 0;
+    double exp=log2(n);
+    if (exp != (int)exp) return 0;
+    return ((int)exp%2==0);
+}
+
+int flipBit(int a,int b) {
+    int n = a^b;
+    int cnt = 0;
+    while(n){
+        n &= (n-1);
+        cnt++;
+    }return cnt;
+}
+
+vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    sort(nums.begin(),nums.end());
+    set<vector<int>> hsh;
+    int n = nums.size();
+    int sz = (1 << n);
+    for(int mask = 0; mask < sz; ++mask){
+        vector<int> subset;
+        for(int i = 0; i < n; ++i){
+            if(((mask>>i)&1) != 0){
+                subset.push_back(nums[i]);
+            }
+        }hsh.insert(subset);
+    }vector<vector<int>> ans(hsh.begin(),hsh.end());
+    return ans;
+}
+
+int singleNumber(vector<int>& nums) {
+  int n = nums.size();
+  int xorSum = 0;
+  for(int i = 0; i < n; ++i){
+      xorSum ^= nums[i];
+  }  return xorSum;
+}
+
+int singleNumber(vector<int>& nums) {
+    int n = nums.size();
+    int res = 0;
+    int arr[32] = {0};
+    for(int i = 0; i < 32; ++i){
+        int sum = 0;
+        for(int j = 0; j < n; ++j){
+            if((nums[j]>>i)&1 != 0) sum++;
+        }if(sum%3 != 0) res |= (1<<i);
+    }return  res;
+}
+
+vector<int> singleNumber(vector<int>& nums) {
+    int xorSum = 0;
+    for(auto& num : nums){
+        xorSum ^= num ;
+    }int num1 = 0;
+    int rmsb = xorSum & ~(xorSum-1LL);
+    for(auto& num : nums){
+        if(num&rmsb){
+            num1 ^= num;
+        }
+    }return {num1,(num1^xorSum)};
+}
+
+int getSum(int a, int b) {               
+    return b==0? a:getSum(a^b, (a&b)<<1);
+}
+
+char findTheDifference(string s, string t) {
+    int n = s.size() ,m = t.size();
+    for(int i = 0;i < n; i++)
+        t[i+1] += t[i]-s[i]; 
+    return t[m-1]; 
+}
+
+char findTheDifference(string s, string t) {
+    int n = s.size() ,m = t.size();
+    int xorSum = 0;
+    for(int i = 0; i < n; ++i){
+        xorSum ^= s[i]^t[i];
+    }return (char)(xorSum^t[m-1]);
+}
+
+int maxProduct(vector<string>& words) {
+    int n = words.size();
+    int len[(int)1e3+7] = {0};
+    int masks[(int)1e3+2] = {0};
+    int maxi = 0;
+    for(int i = 0; i < n; ++i){
+        int size = words[i].size();
+        len[i] = size;
+    }for(int i = 0; i < n; ++i){
+        string word = words[i];
+        int mask = 0;
+        for(int j = 0; j < len[i]; ++j){
+            char ch = word[j];
+            mask |= (1<<(ch-'a'));
+        }masks[i] = mask;
+        for(int j = 0; j < i; ++j){
+            if(!(masks[i] & masks[j])){
+                int prod = len[i]*1LL*len[j];
+                if(maxi < prod){
+                    maxi = prod;
+                }
+            }
+        }
+    }return maxi;
+}
+
+double myPow(double x, int n) {
+    double ans = 1;
+    long long pow = n;
+    if(pow < 0) pow = -pow;
+    while(pow){
+        if(pow&1){
+            ans *= x;
+        }x *= x;
+        pow >>= 1;
+    }return n < 0? 1/ans : ans;
+}
+
+uint32_t reverseBits(uint32_t n) {
+    uint32_t ans = 0;
+    for(int i = 0; i < 32; ++i){
+        if((n>>i) & 1) ans |= (1<<(31-i));
+    }return ans;
+}
+
+uint32_t reverseBits(uint32_t x) {
+    x = ((x & 0xaaaaaaaa) >> 1) | ((x & 0x55555555) << 1);
+    x = ((x & 0xcccccccc) >> 2) | ((x & 0x33333333) << 2);
+    x = ((x & 0xf0f0f0f0) >> 4) | ((x & 0x0f0f0f0f) << 4);
+    x = ((x & 0xff00ff00) >> 8) | ((x & 0x00ff00ff) << 8);
+    x = ((x & 0xffff0000) >> 16) | ((x & 0x0000ffff) << 16);
+    return x;
+}
+
+int rangeBitwiseAnd(int l, int r) {
+    int c = 0;
+    while(l != r){
+       l>>=1;
+       r>>=1;
+       c++;
+    }return l<<c;
+}
+
+vector<int> evenOddBit(int n) {
+    int total_bits = __builtin_popcount(n);
+    int bits = (int)log2(n)+1;
+    int even_bits = 0;
+    for(int i = 0; i < bits; i += 2){
+        if((n>>i)&1){
+            even_bits++;
+        }
+    }return {even_bits ,total_bits-even_bits};
+}
+
+vector<int> countBits(int n) {
+    vector<int> ans(1,0);
+    for(int i = 1; i <= n; ++i){
+        ans.push_back(ans[i/2] + i%2);
+    }return ans;
+}
+
+int bitsTillN(int n){
+    if(n < 2)   return n;
+    int bits = (int)log2(n)+1;
+    int comb = (1<<(bits-1));
+    int bitsTillMaxi = (bits-1)*((comb)>>1);
+    int rob = n-comb+1;
+    int rop = bitsTillN(rob-1);
+    return bitsTillMaxi + rop + rob;
+}
+
+int a,b;
+cin >> a >> b;
+int sum = 0;
+for(int i = 0; i < b; ++i){
+    sum += a;
+}cout << sum << endl;
+
+int divide(int dividend, int divisor) {
+    if(divisor == 1){
+        return dividend;
+    }else if(divisor == -1 && dividend == INT_MIN){
+        return INT_MAX;
+    }int sign = dividend > 0 ^ divisor > 0 ? -1 : 1;
+    long long divd = abs(dividend) ,divs = abs(divisor) ,q = 0;
+    while(divd >= divs){
+        divd -= divs;
+        q++;
+    }return q*sign;
+}
+
+int divide(int dividend, int divisor) {
+    if (dividend == (1<<31) && divisor == -1) {
+        return INT_MAX;
+    }long dvd = abs(dividend), dvs = abs(divisor), ans = 0;
+    int sign = dividend > 0 ^ divisor > 0 ? -1 : 1;
+    while (dvd >= dvs) {
+        long temp = dvs, m = 1;
+        while (temp << 1 <= dvd) {
+            temp <<= 1;
+            m <<= 1;
+        }dvd -= temp;
+        ans += m;
+    }return sign * ans;
+} 
+
+int majorityElement(vector<int>& nums) {
+    int n = nums.size();
+    for(int i = 0; i < n; ++i){
+        int cnt = 0;
+        for(int j = 0; j < n; ++j){
+            if(nums[i] == nums[j]){
+                cnt++;
+                if(cnt > n/2){
+                    return nums[i];
+                }
+            }
+        }
+    }return -1;
+}
+
+int majorityElement(vector<int>& nums) {
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+    return nums[n/2];
+}
+
+int majorityElement(vector<int>& nums) {
+    unordered_map<int,int> mpp;
+    int n = nums.size();
+    for(auto& num : nums){
+        if(++mpp[num] > n/2){
+            return num;
+        }
+    }return -1;
+}
+
+int majorityElement(vector<int>& nums) {
+    int n = nums.size() ,ans = 0;
+    for(int i = 0; i < 32; ++i){
+        int sum = 0;
+        for(int j = 0; j < n; ++j){
+            if((nums[j]>>i)&1){
+                sum++;
+            }
+        }if(sum > n/2){
+            ans |= (1<<i);
+        }
+    }return ans;
+}
+
+int majorityElement(vector<int>& nums) {
+    int cnd = -1 ,vote = 0 ,n = nums.size();
+    for(int i = 0; i < n; ++i){
+        int num = nums[i];
+        if(vote == 0){
+            cnd = num;
+            vote = 1;
+        }else if(cnd == num){
+            vote++;
+        }else{
+            vote--;
+        }
+    }return cnd;
+}
+
+vector<int> majorityElement(vector<int>& nums) {
+    int n = nums.size();
+    int mini = (int)(n/3)+1;
+    int cnd1 = -1 ,cnd2 = -2 ,vt1 = 0 ,vt2 = 0;
+    for(int i = 0; i < n; ++i){
+        int cnd = nums[i];
+        if(vt1 == 0 && cnd2 != cnd){
+            cnd1 = cnd;
+            vt1  = 1;
+        }else if(cnd1 == cnd){
+            vt1++;
+        }else if(cnd2 == cnd){
+            vt2++;
+        }else if(vt2 == 0 && cnd1 != cnd){
+            cnd2 = cnd;
+            vt2  = 1;
+        }else if(cnd1 != cnd && cnd2 != cnd){
+            vt1--;
+            vt2--;
+        }else if(vt1 >= mini && vt2 >= mini){
+            break;
+        }
+    }int cnt1 = 0 ,cnt2 = 0;
+    for(int i = 0; i < n; ++i){
+        if(nums[i] == cnd1){
+            cnt1++;
+        }else if(nums[i] == cnd2){
+            cnt2++;
+        }
+    }if(cnt1 >= mini && cnt2 >= mini){
+        if(cnd1 < cnd2){
+            return {cnd1,cnd2};
+        }else{
+            return {cnd2,cnd1};
+        }
+    }
+    else if(cnt1 >= mini)   return {cnd1};
+    else if(cnt2 >= mini)   return {cnd2};
+    return {};
+}
+
+int missingNumber(vector<int>& nums) {
+    int n = nums.size();
+    for(int i = 0; i <= n; ++i){
+        bool flag = 0;
+        for(int j = 0; j < n; ++j){
+            if(nums[j] == i){
+                flag = 1;
+                break;
+            }
+        }if(flag == 0){
+            return i;
+        }
+    }return -1;
+}
+
+int missingNumber(vector<int>& nums) {
+    sort(nums.begin(),nums.end());
+    int n = nums.size();
+    for(int i = 0; i < n; ++i){
+        if(nums[i] != i){
+            return i;
+        }
+    }return n;
+}
+
+int missingNumber(vector<int>& nums) {
+    sort(nums.begin(),nums.end());
+    int n = nums.size();
+    int s = 0 ,e = n-1 ,ans = n;
+    while(s <= e){
+        int mid = (s+e)/2;
+        if(nums[mid] == mid){
+            s = mid+1;
+        }else{
+            ans = mid;
+            e = mid-1;
+        }
+    }return ans;
+}
+
+int missingNumber(vector<int>& nums) {
+    int n = nums.size();
+    unordered_map<int,int> mpp;
+    for(auto& num : nums){
+        mpp[num]++;
+    }for(int num = 0; num <= n; ++num){
+        if(mpp[num] == 0){
+            return num;
+        }
+    }return -1;
+}
+
+int missingNumber(vector<int>& nums) {
+    int n = nums.size();
+    int sn = n*(n+1) / 2;
+    return sn-accumulate(nums.begin(),nums.end(),0);
+}
+
+int missingNumber(vector<int>& nums) {
+   int n = nums.size();
+   int xrN;
+   int xorSum = 0;
+   if(n%4 == 0){
+       xrN = n;
+   }else if(n%4 == 1){
+       xrN = 1;
+   }else if(n%4 == 2){
+       xrN = n+1;
+   }else{
+       xrN = 0;
+   }for(int i = 0; i < n; ++i){
+       xorSum ^= nums[i];
+   }return xorSum^xrN;
+}
+
+int missingNumber(vector<int>& nums) {
+    int xorSum = 0 ,n = nums.size();
+    for(int i = 0; i < n; ++i){
+        xorSum ^= nums[i];
+        xorSum ^= (i+1);
+    }return xorSum;
+}
+
+int missingNumber(vector<int>& nums) {
+    int n = nums.size() ,ans = 0;
+    for(int i = 0; i < 32; ++i){
+        int x = 0 ,y = 0;
+        for(int j = 0; j < n; ++j){
+            if((nums[j]&(1<<i)) != 0){
+                y++;
+            }if(((j+1)&(1<<i)) != 0){
+                x++;
+            }
+        }if(x > y){
+            ans |= (1<<i);
+        }
+    }return ans;
+}
+
+int findDuplicate(vector<int>& nums) {
+    int n = nums.size();
+    for(int i = 0; i < n; ++i){
+        for(int j = i+1; j < n; ++j){
+            if(nums[i] == nums[j]){
+                return nums[i];
+            }
+        }
+    }return n;
+}
+
+int findDuplicate(vector<int>& nums) {
+    sort(nums.begin(),nums.end());
+    int n = nums.size();
+    for(int i = 1; i < n; ++i){
+        if(nums[i] == nums[i-1]){
+            return nums[i];
+        }
+    }return n;
+}
+
+int findDuplicate(vector<int>& nums) {
+    int n = nums.size() ,ans = n;
+    int low = 0 ,high = n-1;
+    while(low <= high){
+        int cnt = 0 ,mid = (low+high)/2;
+        for(int i = 0; i < n; ++i){
+            if(nums[i] <= mid){
+                cnt++;
+            }
+        }if(cnt <= mid){
+            low = mid+1;
+        }else{
+            ans = mid;
+            high = mid-1;
+        }
+    }return ans;
+}
+
+int findDuplicate(vector<int>& nums) {
+    unordered_map<int,int> mpp;
+    int n = nums.size();
+    for(auto& num : nums){
+       if(++mpp[num] == 2){
+           return num;
+       }
+    }return n;
+}
+
+int findDuplicate(vector<int>& nums) {
+    unordered_set<int> st;
+    int n = nums.size();
+    for(auto& num : nums){
+        if(st.find(num) != st.end()){
+            return num;
+        }st.insert(num);
+    }return n;
+}
+
+int findDuplicate(vector<int>& nums) {
+    int n = nums.size() ,ans = 0;
+    for(int i = 0; i < 32; ++i){
+        int x = 0 ,y = 0;
+        for(int j = 0; j < n; ++j){
+            if(nums[j]&(1<<i)){
+                x++;
+            }if(j&(1<<i)){
+                y++;
+            }
+        }if(x > y){
+            ans |= (1<<i);
+        }
+    }return ans;
+}
+
+int findDuplicate(vector<int>& nums) {
+    int slow = nums[0];
+    int fast = nums[0];
+    do{
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+    }while(slow != fast);
+    fast = nums[0];
+    while(slow != fast){
+        slow = nums[slow];
+        fast = nums[fast];
+    }return slow;
+}
+
+int findDuplicate(vector<int>& nums) {
+    int n = nums.size();
+    for(int i = 0; i < n; ++i){
+        int num = nums[i]%n;
+        nums[num] += n;
+        int occ = nums[num]/n;
+        if(occ > 1){
+            return num;
+        }
+    }return n;
+}
+
+int findDuplicate(vector<int>& nums) {
+    int n = nums.size();
+    for(int i = 0; i < n;){
+        int num = nums[i];
+        if(num == i+1){
+            i++;
+        }else if(num == nums[num-1]){
+            return num;
+        }else{
+            nums[i] = nums[num-1];
+            nums[num-1] = num;
+        }
+    }return n;
+}
+
+int findDuplicate(vector<int>& nums) {
+    for(auto& num : nums){
+        int idx = abs(num);
+        if(nums[idx] < 0){
+            return idx;
+        }nums[idx] = -nums[idx];
+    }return nums.size();
+}
+
+vector<int> findMissingRepeatingNumbers(vector <int> a) {
+    int n = a.size() ,rept = -1 ,miss = -1;
+    for(int i = 1; i <= n; ++i){
+        int cnt = 0;
+        for(int j = 0; j < n; ++j){
+            if(a[j] == i){
+                cnt++;
+            }
+        }if(cnt == 0){
+            miss = i;
+        }else if(cnt == 2){
+            rept = i;
+        }else if (rept != -1 && miss != -1){
+            break;
+        }
+    }return { rept, miss };
+}
+
+vector<int> findMissingRepeatingNumbers(vector <int> a) {
+    int n = a.size() ,rept = -1 ,miss = -1;
+    unordered_map<int,int> mpp;
+    for(int i = 0; i < n; ++i){
+        mpp[a[i]]++;
+    }for (int i = 1; i <= n; ++i) {
+        if(mpp[i] == 0){
+            miss = i;
+        }else if(mpp[i] == 2){
+            rept = i;
+        }else if(rept != -1 && miss != -1){
+            break;
+        }
+    }return {rept, miss};
+}
+
+vector<int> findMissingRepeatingNumbers(vector<int> a) {
+    long long n = a.size(); 
+    long long SN = (n * (n + 1)) / 2;
+    long long S2N = (n * (n + 1) * (2 * n + 1)) / 6;
+    long long S = 0, S2 = 0;
+    for (int i = 0; i < n; i++) {
+        S += a[i];
+        S2 += (long long)a[i] * (long long)a[i];
+    }long long val1 = S - SN;
+    long long val2 = S2 - S2N; 
+    val2 = val2 / val1;
+    long long x = (val1 + val2) / 2;
+    long long y = x - val1;
+    return {(int)x, (int)y};
+}
+
+vector<int> findMissingRepeatingNumbers(vector<int> a) {
+    int n = a.size();
+    int xr = 0 ,zero = 0 ,one = 0;
+    for (int i = 0; i < n; i++){
+        xr = xr ^ a[i];
+        xr = xr ^ (i + 1);
+    }int rmsb = xr & -xr;
+    for (int i = 0; i < n; i++) {
+        if(a[i] & rmsb) {
+            one ^= a[i];
+        }if((i+1)&rmsb){
+            one ^= (i+1);
+        }
+    }zero = one^xr;
+    int cnt = 0;
+    for (int i = 0; i < n; i++) {
+        if (a[i] == zero) cnt++;
+    }if (cnt == 2) return {zero, one};
+    return {one, zero};
+}
+ 

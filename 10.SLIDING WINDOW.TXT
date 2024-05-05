@@ -1,0 +1,645 @@
+(^_^)   INTUITION : 
+        monotonicity 
+        subarr 
+        atMost,Max,Exact
+        Counting
+        longest / smallest
+
+
+1. Shrinkable Sliding Window :
+
+
+for(int i = 0; i < n; ++i){
+    for(int j = i; j < n; ++j){
+        // proceed for valid
+    }
+}
+
+for(int i = 0; i < n; ++i){
+    for(int j = i; j < n; ++j){
+        if(invalid()){
+            break;
+        }
+        // proceed
+    }
+}
+
+int i = 0 , j = 0;
+while(j < n){
+    //process
+    while(invalidProcess()){
+        //exclude
+        ++i;
+    }
+    //inclue
+    ++j;
+}
+
+int longestSubarrayWithSumK(vector<int> a, long long k) {
+    int n = a.size() ,i = 0 ,j = 0 ,maxi = 0;
+    long long sum = 0;
+    for(int j = 0; j < n; ++j){
+        sum += a[j];
+        while(sum > k){
+            sum -= a[i++];
+        }
+        if(sum == k){
+            maxi = max(maxi ,j-i+1);
+        }
+    }
+    return maxi;
+}
+
+int maxProfit(vector<int>& prices) {
+    int n = prices.size() ,maxProfit = 0 ,mini = prices[0];
+    for(int i = 1; i < n; ++i){
+        int profit = prices[i] - mini;
+        maxProfit = max(maxProfit ,profit);
+        mini = min(mini,prices[i]);
+    }
+    return maxProfit;
+}
+
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int left = 0 ,right = 0 ,maxProfit = 0;
+    while(right < n){
+        int profit = prices[right] - prices[left];
+        if(profit < 0)  left = right;
+        maxProfit = max(maxProfit,profit);
+        ++right;
+    }
+    return maxProfit;
+}
+
+int findMaxConsecutiveOnes(vector<int>& nums) {
+    int n = nums.size() ,maxi = 0 ,i = 0 ,j = 0;
+    while(j < n){
+        if(nums[j] == 0)    i = j + 1;
+        maxi = max(maxi,j++ - i + 1);
+    }
+    return maxi;
+}  
+
+int lengthOfLongestSubstring(string s) {
+    int n = s.size();
+    if(n == 0 || n == 1)    return n;
+    unordered_map<int,int> hsh;
+    int maxi = 1 ,j = 0;
+    for(int i = 0; i < n; ++i){
+        if(hsh.find(s[i]) != hsh.end()){
+            j = max(j,hsh[s[i]]+1);
+        }
+        maxi = max(maxi,i-j+1);
+        hsh[s[i]] = i;
+    }
+    return maxi;
+}
+
+int maxFrequency(vector<int>& nums, int k) {
+    sort(nums.begin(),nums.end());
+    int n = nums.size() ,maxi = 0;
+    long long preSum = 0;
+    for(int i = 0 ,j = 0; i < n; ++i){
+        preSum += nums[i];
+        if(((i-j+1)*1LL*nums[i])-preSum > k){
+            preSum -= nums[j++];
+        }
+        maxi = max(maxi,i-j+1);
+    }
+    return maxi;
+}
+
+class Solution {
+    int bSearch(int idx,vector<int>&nums,int k,vector<long long> &prefixSum){
+        int s = 0;
+        int e = idx;
+        int ans = idx;
+        while(s <= e){
+            int mid = ((s+e)>>1);
+            long long cnt = (idx-mid+1);
+            long long sum = cnt*1LL*nums[idx];
+            long long currSum = prefixSum[idx] - prefixSum[mid] + nums[mid];
+            int ops = sum - currSum;
+            if(ops <= k){
+                ans = mid;
+                e = mid-1;
+            }
+            else{
+                s = mid+1;
+            }
+        }
+        return (idx - ans + 1);
+    }
+public:
+    int maxFrequency(vector<int>& nums, int k) {
+        sort(nums.begin() ,nums.end());
+        int n = nums.size();
+        int res = 1;
+        vector<long long> prefixSum(n,0);
+        prefixSum[0] = nums[0];
+        for(int i = 1; i < n; ++i){
+            prefixSum[i] += prefixSum[i-1] + nums[i];
+        }
+        for(int i = 0; i < n; ++i){
+            res = max(res,bSearch(i,nums,k,prefixSum));
+        }
+        return res;
+    }
+};
+
+
+1.2 Longest - Non Shrikable :
+
+
+int i = 0 , j = 0;
+while(j < n){
+    //process
+    if(invalidProcess()){
+        //exclude
+        ++i;
+    }
+    //inclue
+    ++j;
+}
+return j-i;
+
+int longestOnes(vector<int>& nums, int k) {
+    int n = nums.size() ,i = 0 ,j = 0;
+    while(j < n){
+        k -= !nums[j];
+        if(k < 0)   k += !nums[i++];
+        ++j;
+    }
+    return j - i;
+}
+
+int totalFruit(vector<int>& fruits) {
+    int n = fruits.size() ,i = 0 ,j = 0;
+    unordered_map<int,int> hsh;
+    while(j < n){
+        hsh[fruits[j]]++;
+        if(hsh.size() > 2){
+            hsh[fruits[i++]]--;
+            if(!hsh[fruits[i-1]]){
+                hsh.erase(fruits[i-1]);
+            }
+        }
+        ++j;
+    }
+    return j - i;
+}
+    
+int characterReplacement(string s, int k) {
+    unordered_map<char, int> hsh;
+    int i = 0 ,j = 0, maxf = 0 ,n = s.size();
+    for (; j < n; j++) {
+        maxf = max(maxf,++hsh[s[j]]);
+        if((j - i + 1) - maxf > k)      hsh[s[i++]]--;
+    }
+    return j-i;
+}
+    
+int kDistinctChars(int k, string &s){
+    int i = 0 ,j = 0 ,n = s.size();
+    unordered_map<char,int> hsh;
+    for(; j < n; ++j){
+        hsh[s[j]]++;
+        if(hsh.size() > k){
+            hsh[s[i]]--;
+            if(hsh[s[i]] == 0){
+                hsh.erase(s[i]);
+            }
+            i++;
+        }
+    }
+    return j-i;
+}   
+
+
+1.3 Smallest : 
+
+int smallestSubarrayWithSum(int arr[],int n,int x){
+    int sum = 0,minLength = n+1;
+    int start = 0,end = 0;
+    while(end < n){
+        if(sum <= x){
+            sum += arr[end++];
+            continue;
+        }
+        minLength = min(minLength,end-start);
+        sum -= arr[start++];
+    }
+    return minLength;
+}
+
+
+1.4 Counting :
+
+atMost(k) - atMost(k-1) -> i-j+1
+
+for(int i = 0; i < n; ++i){
+    //prefix
+    //revEngg. 
+    //prefixCnt
+}
+
+int getLongestSubarray(vector<int>& nums, int k){
+    int n = nums.size() ,pre = 0 ,maxi = 0;
+    unordered_map<int,int> mp;
+    for(int i = 0; i < n; ++i){
+        pre += nums[i];
+        if(pre == k)    maxi = max(maxi ,i+1);
+        int rem = pre - k;
+        if(mp.find(rem) != mp.end())    maxi = max(maxi,i - mp[rem]);
+        if(mp.find(pre) == mp.end())    mp[pre] = i;
+    }
+    return maxi ;
+}
+
+int numberOfSubstrings(string s) {
+    int n = s.size() ,i = 0 ,cnt = 0;
+    unordered_map<char,int> hsh;
+    for(int j = 0; j < n; ++j){
+        hsh[s[j]]++;
+        while(hsh['a'] && hsh['b'] && hsh['c']){
+            cnt += (n-j);
+            hsh[s[i++]]--;
+        }
+    }
+    return cnt;
+}
+
+int numberOfSubstrings(string s) {
+    int n = s.size() ,cnt = 0 ,j = 0;
+    int hsh[] = {-1,-1,-1};
+    while(j < n){
+        hsh[s[j]-'a'] = j; 
+        cnt += min({hsh[0],hsh[1],hsh[2]})+1;
+        ++j;
+    }
+    return cnt;
+}
+
+int subarraysWithSumK(vector < int > a, int b) {
+    int n = a.size() ,xr = 0 ,cnt = 0;
+    map<int,int> mp;
+    mp[xr]++;
+    for(int i = 0; i < n; ++i){
+        xr ^= a[i];
+        cnt += mp[xr^b];
+        mp[xr]++;
+    }
+    return cnt;
+}
+
+int findAllSubarraysWithGivenSum(vector <int> & arr, int k){
+    unordered_map<int,int> hsh;
+    int preSum = 0 ,n = arr.size() ,cnt = 0;
+    hsh[preSum]++;
+    for(int i = 0; i < n; ++i){
+        preSum += arr[i];
+        cnt += hsh[preSum - k];
+        hsh[preSum]++;
+    }
+    return cnt;
+}
+
+int numberOfSubarrays(vector<int>& nums, int k) {
+    unordered_map<int,int> mp;
+    int n = nums.size() ,odd = 0 ,cnt = 0;
+    mp[odd]++;
+    for(int i = 0; i < n; ++i){
+        odd += nums[i]%2;
+        cnt += mp[odd - k];
+        mp[odd]++;
+    }
+    return cnt;
+}
+
+class Solution {
+    int helper(vector<int>& nums,int k){
+        int n = nums.size() ,cnt = 0 ,odd = 0 ,j = 0;
+        for(int i = 0; i < n; ++i){
+            odd += nums[i]&1;
+            while(odd > k)  odd -= nums[j++]&1;
+            cnt += i - j + 1;
+        }return cnt;
+    }
+public:
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        return helper(nums,k) - helper(nums,k-1);
+    }
+};
+
+int numSubarraysWithSum(vector<int>& nums, int goal) {
+    int n = nums.size() ,sum = 0 ,cnt = 0;
+    unordered_map<int,int> mp;
+    mp[sum]++;
+    for(int i = 0; i < n; ++i){
+        sum += nums[i];
+        cnt += mp[sum - goal];
+        mp[sum]++;
+    }
+    return cnt;
+}
+
+int helper(vector<int>& nums, int goal){
+    int n = nums.size(), count = 0, i = 0, j = 0, sum = 0;
+    while(j < n){
+        sum += nums[j];
+        while(sum > goal)
+            sum -= nums[i++];
+        count += j - i + 1;
+        j++;
+    }
+    return count;
+}
+int numSubarraysWithSum(vector<int>& nums, int goal) {
+    return helper(nums,goal) - helper(nums,goal - 1);
+}
+
+class Solution {
+    int most(vector<int> &nums,int k){
+        if(k == 0){
+            return k;
+        }
+        int n = nums.size() ,i = 0 ,cnt = 0;
+        unordered_map<int,int> hsh; 
+        for(int j = 0; j < n; ++j){
+            hsh[nums[j]]++;
+            while(hsh.size() > k){
+                hsh[nums[i]]--;
+                if(hsh[nums[i]] == 0){
+                    hsh.erase(nums[i]);
+                }
+                i++;
+            }
+            cnt += (j-i+1);
+        }
+        return cnt;
+    }
+public:
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        return most(nums,k) - most(nums,k-1);
+    }
+};
+
+
+
+2.  Constant Sliding Window :
+
+
+2.1
+
+for(int i = 0; i < k; ++i){
+    //form window
+}
+for(int i = k; i < n; ++i){
+    //exclude i-k and include i
+}
+
+void maxSubarrSum(int arr[],int n,int k,int x){
+    int sum = 0 ,maxSum = 0;
+    for(int i = 0; i < k; ++i){
+        sum += arr[i];
+    }
+    if(sum < x){
+        maxSum = sum;
+    }
+    for(int i = k; i < n; ++i){
+        sum -= arr[i-k];
+        sum += arr[i];
+        if(sum < x){
+            maxSum = max(maxSum,sum);
+        }
+    }
+    cout << maxSum << endl;
+}
+
+void numDivsThree(vector<int> arr,int k){
+    pair<int,int> ans = {-1,0};
+    int n = arr.size();
+    int sum = 0;
+    for(int i = 0; i < k; ++i){
+        sum += arr[i];
+    }
+    bool found = false;
+    if(sum%3 == 0){
+        ans = make_pair(0,k-1);
+        found = true;
+    }
+    for(int i = k; i < n; ++i){
+        if(found){
+            break;
+        }
+        sum += arr[i]-arr[i-k];
+        if(sum%3 == 0){
+            ans = make_pair(i-k+1,i);
+        }
+    }
+    cout << ans.first << " " << ans.second << endl;
+}
+
+bool isNumPerfact(int n){
+    int sum = 1;
+    for(int div = 2; div <= sqrt(n); ++div){
+        if(n%div == 0){
+            if(div == n/div){
+                sum += div;
+            }
+            else{
+                sum += div + n/div;
+            }
+        }
+    }
+    return (n != 1 && sum == n);
+}
+int maxSum(int arr[],int n,int k){
+    if(n < k){
+        return -1;  
+    }
+    int res = 0;
+    for(int i = 0; i < k; ++i){
+        res += arr[i];
+    }
+    int sum = res;
+    for(int i = k; i < n; ++i){
+        sum += arr[i];
+        sum -= arr[i-k];
+        res = max(res,sum);
+    }
+    return res;
+}
+int maxPerfactNums(int arr[],int n,int k){
+    for(int i = 0; i < n; ++i){
+        arr[i] = isNumPerfact(arr[i]); 
+    }
+    return maxSum(arr,n,k);
+}
+
+class Solution {
+    bool isEqual(int f1[],int f2[]){
+        for(int i = 0; i < 26; ++i){
+            if(f1[i] != f2[i])  return 0;
+        }
+        return 1;
+    }
+    void cnt(int freq[],string& s,int n){
+        for(int i = 0; i < n; ++i){
+            freq[s[i]-'a']++;
+        }
+    }
+public:
+    bool checkInclusion(string s1, string s2) {
+        int n = s1.length(),m = s2.length();
+        if(n > m)   return 0;
+        int f1[26] = {0},f2[26] = {0};
+        cnt(f1,s1,n);
+        cnt(f2,s2,n);
+        if(isEqual(f1,f2)){
+            return 1;
+        }
+        int i = n;
+        while(i < m){
+            f2[s2[i]-'a']++;
+            f2[s2[i-n]-'a']--;
+            if(isEqual(f1,f2)){
+                return 1;
+            }
+            i++;
+        }
+        return 0;
+    }
+};
+
+
+2.2
+
+for(int i = 0; i < k-1; ++i){
+    //form window
+}
+for(int i = k-1; i < n; ++i){
+    //include i and auto exclude i-k
+}
+
+int palindromicSubarr(vector<int> arr,int k){
+    int num = 0;
+    for(int i = 0; i < k-1; ++i){
+        num = num*10 + arr[i];
+    } 
+    int n = arr.size();
+    for(int i = k-1; i < n; ++i){
+        num = (num % (int)pow(10,k-1))*10 + arr[i];
+        if(isPalindrome(num)){
+            return i-k+1;
+        }
+    }
+    return -1;
+}
+
+vector<string> findRepeatedDnaSequences(string s) {
+    vector<string> ans;
+    int n = s.size();
+    if(n < 11){
+        return ans;
+    }
+    // char keyMap[1<<21]{0};
+    unordered_map<int,int>keyMap;
+    int hshKey = 0;
+    for(int i = 0; i < 9; ++i){
+        hshKey = (hshKey<<2) | (s[i] - 'A' + 1)%5;
+    }
+    for(int i = 9; i < n; ++i){
+        if(keyMap[hshKey = ((hshKey<<2) | (s[i] - 'A' + 1)%5)&0xfffff]++ == 1){
+            ans.push_back(s.substr(i-9,10));
+        }
+    }
+    return ans;
+}
+
+2.3
+
+for(int i = 0; i < k; ++i){
+    //form window
+}
+for(int i = 0; i < k; ++i){
+    //exclude k-1-i and include n-1-i;
+}
+
+int maxScore(vector<int>& cardPoints, int k) {
+    int n = cardPoints.size();
+    int prefix = 0;
+    for(int i = 0; i < k; ++i){
+        prefix += cardPoints[i];
+    }
+    int maxi = prefix;
+    for(int j = 0; j < k; ++j){
+        prefix -= cardPoints[k-1-j];
+        prefix += cardPoints[n-1-j];
+        maxi = max(maxi,prefix);
+    }
+    return maxi;
+}
+
+
+
+string minWindow(string s, string t) {
+    int n = s.size() ,m = t.size();
+    int i = 0 ,ans = INT_MAX ,st = 0 ,freq = m;
+    if(m > n){
+        return "";
+    }
+    unordered_map<char,int> hsh;
+    for(auto &ch : t){
+        hsh[ch]++;
+    }
+    for(int j = 0; j < n; ++j){
+        char ch = s[j];
+        if(hsh[ch] > 0){
+            freq--;
+        }
+        hsh[ch]--;
+        while(!freq){
+            if(ans > (j-i+1)){
+                ans = j-i+1;
+                st = i;
+            }
+            hsh[s[i]]++;
+            if(hsh[s[i]] > 0){
+                freq++;
+            }
+            i++;
+        }
+    }
+    return ((ans == INT_MAX)? "" : (s.substr(st,ans)));
+}
+
+string minWindow(string S, string T){
+	int j = 0 ,min = S.length() ,n = S.length; 
+    string window = "";   
+    for(int i = 0; i < n; i++){
+        if(S[i] == T[j]){  
+            j++;     
+        }
+        if(j==T.length()){
+            int end=i;   
+            j--;   
+            while(j>=0){         
+                if(S[i]==T[j]){
+                    j--;    
+                }
+                i--;  
+            }
+            i++ ,j++;
+            if(end-i<min){
+                min=end-i;
+                window="";  
+                for(int p=i;p<=end;p++){
+                    window+=S[p];   
+                }
+            }
+        }
+    }
+    return window;
+}

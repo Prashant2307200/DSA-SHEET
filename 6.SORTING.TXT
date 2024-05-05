@@ -1,0 +1,247 @@
+void bubbleSort(vector<int>& arr, int n) {
+    for (int cnt = 1; cnt < n; ++cnt) {
+        for (int i = 0; i < n - cnt; ++i) {
+            if (arr[i] > arr[i + 1]) {
+                swap(arr[i], arr[i + 1]);
+            }
+        }
+    }
+}
+
+void selectionSort(vector<int>&arr) {
+    int n = arr.size();
+    for(int i = 0; i < n-1; ++i){
+        int minIdx = i;
+        for(int j = i+1; j < n; ++j){
+            if(arr[j] < arr[minIdx]){
+                minIdx = j;
+            }
+        }swap(arr[minIdx],arr[i]);
+    }
+} 
+
+void insertionSort(int arr[], int n){
+    for(int i = 1 ,j; i < n; ++i){
+        int minElm = arr[i];
+        for(j = i-1; j >= 0; --j){
+            if(arr[j] > minElm){
+                arr[j+1] = arr[j];
+            }else{
+                break; 
+            }
+        }arr[j+1] = minElm;
+    }
+}
+ 
+void merge(int arr[],int l,int mid,int r){
+    int n1 = mid-l+1 ,n2 = r-mid;
+    int a[n1] ,b[n2];
+    for(int i = 0; i < n1; ++i){
+        a[i] = arr[i+l];
+    }
+    for (int j = 0; j < n2; ++j) {
+        b[j] = arr[mid + 1 + j];
+    }int i = 0, j = 0, k = l;
+    while(i < n1 || j < n2){
+        if(i < n1 && j < n2){
+            if(a[i] <= b[j]){
+                arr[k++] = a[i++];
+            }else{
+                arr[k++] = b[j++];
+            }
+        }else if(i < n1){
+            arr[k++] = a[i++];
+        }else if(j < n2){
+            arr[k++] = b[j++];
+        }
+    }return;
+}void mergeSort(int arr[], int l, int r) {
+    if(l < r){
+        int mid = (l+r)/2;
+        mergeSort(arr,l,mid);
+        mergeSort(arr,mid+1,r);
+        merge(arr,l,mid,r);
+    }return;
+}
+
+int partitionArray(int nums[], int start, int end) {
+    int pi = nums[end];
+    int slow = start-1;
+    for(int fast = start; fast < end; ++fast){
+        if(nums[fast] < pi){
+            swap(nums[fast],nums[++slow]);
+        }
+    }swap(nums[++slow],nums[end]);
+    return slow;
+}void quickSort(int input[], int start , int end ) {
+    if (start < end) {
+        int pi = partitionArray(input, start, end);
+        quickSort(input, start, pi - 1);
+        quickSort(input, pi + 1, end);
+    }return;
+}
+ 
+void count_sort(int arr[], int n) { 
+    int k = *max_element(arr, arr + n); 
+    int count[k + 1] = { 0 }; 
+    for(int i = 0; i < n; i++){ 
+        count[arr[i]]++; 
+    }for (int i = 1; i <= k; i++) { 
+        count[i] += count[i - 1]; 
+    }int ans[n]; 
+    for(int i = n - 1; i >= 0; i--) { 
+        ans[--count[arr[i]]] = arr[i]; 
+    }for (int i = 0; i < n; i++) { 
+        arr[i] = ans[i]; 
+    }return;
+} 
+
+void sortColors(vector<int>& nums) {
+    int s = 0 ,e = nums.size()-1 ,mid = 0;
+    while(mid <= e){
+        if(nums[mid] == 1) mid++;
+        else if(nums[mid] == 0) swap(nums[mid++],nums[s++]);
+        else swap(nums[mid],nums[e--]);
+    }
+}
+
+void segregate0and1(int arr[], int n) {
+    int low = 0 ,high = n-1;
+    while(low <= high){
+        if(arr[low] == 1 && arr[high] == 0){
+            swap(arr[low++],arr[high--]);
+        }else if(arr[high] == 1){
+            high--;
+        }else{
+            low++;
+        }
+    }return;
+}
+
+void moveZeroes(vector<int>& nums) {
+    int n = nums.size();
+    int slow = 0;
+    for(int fast = 0; fast < n; ++fast){
+        if(nums[fast] != 0){
+            swap(nums[slow++],nums[fast]);
+        }
+    }
+}
+
+void waveSort(int arr[],int n){
+    for(int i = 1; i < n; i += 2){
+        if(arr[i] > arr[i-1]){
+            swap(arr[i],arr[i-1]);
+        }if(i != n-1 && arr[i] > arr[i+1]){
+            swap(arr[i],arr[i+1]);
+        }
+    }
+}
+
+int numberOfInversions(vector<int>&a, int n) {
+    long long inv = 0;
+    for(int i = 0; i < n; ++i){
+        for(int j = i+1; j < n; ++j){
+            if(a[i] > a[j]){
+                inv++;
+            }
+        }
+    }return inv;
+}
+
+long long cntInv(int s,int mid,int e,vector<int>& arr){
+    long long inv = 0;
+    int n1 = mid-s+1 ,n2 = e-mid;
+    int a[n1] ,b[n2];
+    for(int i = 0; i < n1; ++i){
+        a[i] = arr[s+i];
+    }for (int j = 0; j < n2; ++j) {
+        b[j] = arr[mid + 1 + j];
+    }int i = 0, j = 0, k = s;
+    while(i < n1 || j < n2){
+        if(i < n1 && j < n2){
+            if(a[i] <= b[j]){
+                arr[k++] = a[i++];
+            }else{
+                inv += n1-i;
+                arr[k++] = b[j++];
+            }
+        }else if(i < n1){
+            arr[k++] = a[i++];
+        }else{
+            arr[k++] = b[j++];
+        }
+    }return inv;
+}long long inversion(int s,int e,vector<int>& a) {
+    long long inv = 0;
+    if(s < e){
+        int mid = (s+e)/2;
+        inv += inversion(s,mid,a);
+        inv += inversion(mid+1,e,a);
+        inv += cntInv(s,mid,e,a);
+    }return inv;
+}int numberOfInversions(vector<int>&a, int n) {
+    int s = 0 ,e = n-1;
+    return inversion(s,e,a);
+}
+
+int reversePairs(vector<int>& nums) {
+    int n = nums.size() ,cnt = 0;
+    for(int i = 0; i < n; ++i){
+        for(int j = i; j < n; ++j){
+            if(nums[i] > 2*1LL*nums[j]){
+                cnt++;
+            }
+        }
+    }return cnt;
+}
+
+class Solution {
+    void merge(vector<int>& nums,int s,int mid,int e){
+        int n1 = mid - s + 1;
+        int n2 = e - mid;
+        int a[n1] ,b[n2];
+        for(int i = 0; i < n1; ++i){
+            a[i] = nums[s+i];
+        }for(int j = 0; j < n2; ++j){
+            b[j] = nums[mid+1+j];
+        }int i = 0 ,j = 0 ,k = s;
+        while(i < n1 || j < n2){
+            if(i < n1 && j < n2){
+                if(a[i] < b[j]){
+                    nums[k++] = a[i++];
+                }else{
+                    nums[k++] = b[j++];
+                }
+            }else if(i < n1){
+                nums[k++] = a[i++];
+            }else {
+                nums[k++] = b[j++];
+            }
+        }
+    }long long rev(vector<int>& nums,int s,int mid,int e){
+        int right = mid+1;
+        long long cnt = 0;
+        for(int i = s; i <= mid; ++i){
+            while(right <= e && nums[i] > (2*1LL*nums[right])){
+                right++;
+            }cnt += (right - mid - 1);
+        }return cnt ;
+    }
+    long long mergeSort(vector<int>& nums,int s,int e){
+        long long cnt = 0;
+        if(s < e){
+            int mid = ((s+e)>>1);
+            cnt += mergeSort(nums,s,mid);
+            cnt += mergeSort(nums,mid+1,e);
+            cnt += rev(nums,s,mid,e);
+            merge(nums,s,mid,e);
+        }return cnt ;
+    }
+public:
+    int reversePairs(vector<int>& nums) {
+        int n = nums.size();
+        int s = 0 ,e = n-1;
+        return (int)mergeSort(nums,s,e);
+    }
+};
