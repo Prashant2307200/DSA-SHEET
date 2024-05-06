@@ -6,7 +6,9 @@ reverse(v.begin(),v.end()); rand()
 
 do{
     ans.push_back(nums);
-}while(next_permutation(nums.begin(),nums.end())); //is_permutation(,,,);
+}
+while(next_permutation(nums.begin(),nums.end())); 
+//is_permutation(,,,);
 
 it++ : nextIterator ,it+1 : nextLocation
 pair<int, string>p = {2,"hi"}; //arr or vec of pair
@@ -33,14 +35,16 @@ while(t--){
         long long candy_ct;
         cin>>candy_ct;
         bags.insert(candy_ct);
-    }long long total_candies = 0;
+    }
+    long long total_candies = 0;
     for(int i=0 ;i<k ;i++){
         auto last_it = --bags.end();
         long long candy_ct = *last_it;
         total_candies += candy_ct;
         bags.erase(last_it);
         bags.insert(candy_ct/2);
-    }cout<<total_candies<<endl;
+    }
+    cout<<total_candies<<endl;
 }
 
 map<pair<string,string>,vector<int>>m;
@@ -55,14 +59,16 @@ for(int i=0;i<n;i++){
         cin>>x;
         m[{fn,ln}].push_back(x);
     }
-}for(auto &pr:m){
+}
+for(auto &pr:m){
     auto &full_name = pr.first;
     auto &list = pr.second;
     cout<<full_name.first<<" "<<full_name.second<<endl;
     cout<<list.size()<<endl;
     for(auto &ele:list){
         cout<<ele<<" ";
-    }cout<<endl;
+    }
+    cout<<endl;
 }
 
 map<int,multiset<string>>marks_map;
