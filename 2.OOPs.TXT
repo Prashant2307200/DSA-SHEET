@@ -3,8 +3,8 @@ OOPs :
 
 ENCAPSULATION : data / information hiding
 ABSTRACTION   : implementation hiding
-INHERITENCE   ; mode ,types ,ambiguity
-POLYMORPHISM  : runtime(method overriding)
+INHERITENCE   : mode ,types ,ambiguity
+POLYMORPHISM  : runtime(method overriding,virtual)
                 compiletime(func/op oveerloading)
 
 Complex operator + (Complex const& obj){
@@ -40,28 +40,34 @@ class Student : public Human{
         static int timeToComplete;
         static int access(){
             return timeToComplete;
-        }Student(){
+        }
+        Student(){
             this -> name   = new char[100];
             this -> age    = 0;
             this -> gender = 0;
-        }Student(char name[],int age,bool gender){
+        }
+        Student(char name[],int age,bool gender){
             this -> name = new char[100];
             strcpy(this -> name ,name);
             this->age    = age;
             this->gender = gender;
-        }Student(Student &s){
+        }
+        Student(Student &s){
             this -> name = new char[100];
             strcpy(this -> name ,s.name);
             this->age    = s.age;
             this->gender = s.gender;
-        }void setChar(char ch){
+        }
+        void setChar(char ch){
             this -> name[2] = ch;
-        }void printInfo(){
+        }
+        void printInfo(){
             cout << this -> name    << endl;
             cout << this -> age     << endl;
             cout << this -> gender  << endl;
             cout << endl;
-        }~Student(){
+        }
+        ~Student(){
             delete (this -> name);
         }
 };
